@@ -1,0 +1,43 @@
+开始正式训练模型，首先
+在git bash中使用
+dos2unix test.sh
+dos2unix dist_test.sh
+修复了 .sh 脚本的换行符问题（通过 dos2unix）
+
+选择small小模型训练（受限于电脑显卡）
+然后修改了mask_rcnn_deit_small_fpn_3x_coco.py得到了mask_rcnn_deit_small_fpn_3x_coco_gtsrt.py
+
+使用pip install yapf==0.32.0
+下载了适配模型的版本
+
+在mask_rcnn_deit_small_fpn_3x_coco_gtsrt.py添加了
+work_dir = './work_dirs/mask_rcnn_deit_small_fpn_3x_coco_gtsrt'
+
+开始使用指令
+cd/
+cd C:\Users\Icarus\Desktop\thesis\environment\4\ViT-CoMer\detection
+conda activate vit1
+python train.py configs/mask_rcnn/mask_rcnn_deit_small_fpn_3x_coco_gtsrb.py
+
+又添加了pipelinediamagnetic段
+发现数据集依然存在bug
+
+生成模型和日志文件
+python train.py configs/mask_rcnn/mask_rcnn_deit_small_fpn_3x_coco_gtsrb.py > train_log.txt 2>&1
+
+python train.py configs/mask_rcnn/mask_rcnn_deit_small_fpn_3x_coco_gtsrb.py > "C:\Users\Icarus\Desktop\thesis\environment\4\ViT-CoMer\detection\work_dirs\0_300multiplication\train_log.txt" 2>&1
+
+imv1：
+python train.py configs/mask_rcnn/mask_rcnn_deit_small_fpn_3x_coco_gtsrb_imv1.py > "C:\Users\Icarus\Desktop\thesis\environment\4\ViT-CoMer\detection\work_dirs\1_imv1\train_log.txt" 2>&1
+
+imv2:
+python train.py configs/mask_rcnn/mask_rcnn_deit_small_fpn_3x_coco_gtsrb_imv2.py > "C:\Users\Icarus\Desktop\thesis\environment\4\ViT-CoMer\detection\work_dirs\2_imv2\train_log.txt" 2>&1
+
+测试用指令（--show-dir用于生成图片，--eval bbox用于生成日志，切记切记）：
+python test.py configs/mask_rcnn/mask_rcnn_deit_small_fpn_3x_coco_gtsrb.py work_dirs/faster_rcnn_deit_small_fpn_3x_coco_gtsrb/epoch_36.pth --show-dir results/
+
+python test.py configs/mask_rcnn/mask_rcnn_deit_small_fpn_3x_coco_gtsrb.py work_dirs/faster_rcnn_deit_small_fpn_3x_coco_gtsrb/epoch_36.pth --eval bbox > results/test_log.txt
+
+
+
+

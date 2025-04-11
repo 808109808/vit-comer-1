@@ -1,0 +1,143 @@
+创建虚拟环境 
+conda create -n vit1 python=3.8 -y
+运行虚拟环境
+conda activate vit1
+
+在detection/ops中运行make.sh
+运行失败，转用直接使用cmd运行python setup.py build install
+
+发现需要MSCV编译器，进入x64 Native Tools Command Prompt for VS 2022”（或者叫“开发者命令提示符”）运行
+虚拟环境
+在虚拟环境中运行了python setup.py build install
+
+出现了警告：
+UserWarning: It seems that the VC environment is activated but DISTUTILS_USE_SDK is not set. ...
+Please set 'DISTUTILS_USE_SDK=1' and try again.
+
+疑似非紧要bug
+使用指令set DISTUTILS_USE_SDK=1
+
+始终出现bug
+
+发现bug是使用了v143而不是要求的v142
+
+使用指令
+set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64;%PATH%
+
+强行使用了v142
+检查指令：
+where cl
+cl
+
+再次使用指令：
+conda activate vit1
+cd C:\Users\Icarus\Desktop\thesis\environment\4\ViT-CoMer\detection\ops
+set DISTUTILS_USE_SDK=1
+python setup.py clean
+python setup.py build install
+
+依然存在bug，因此直接删除了MSCV v143
+
+使用指令
+python setup.py build install > buildlog.txt 2>&1
+生成本地日志
+
+发现依然在使用v143，手动设置 INCLUDE 和 LIB 路径（以管理员身份运行）
+set INCLUDE=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.29.30133\include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um
+
+set LIB=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.29.30133\lib\x64;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\ucrt\x64;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\um\x64
+
+set DISTUTILS_USE_SDK=1
+
+cd/
+conda activate vit1
+cd C:\Users\Icarus\Desktop\thesis\environment\4\ViT-CoMer\detection\ops
+python setup.py clean
+python setup.py build install > buildlog.txt 2>&1
+
+
+为方便在系统变量中设置：
+DISTUTILS_USE_SDK	1
+MSSdk	1
+INCLUDE C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.29.30133\include;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\winrt
+
+LIB （设置的太多了就不赘述了）
+PATH （设置的太多了就不赘述了）
+下面是运行成功后的系统自动生成的日志：
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+正在生成代码
+已完成代码的生成
+running install
+C:\Users\Icarus\anaconda3\envs\vit1\lib\site-packages\setuptools\_distutils\cmd.py:66: SetuptoolsDeprecationWarning: setup.py install is deprecated.
+!!
+
+        ********************************************************************************
+        Please avoid running ``setup.py`` directly.
+        Instead, use pypa/build, pypa/installer or other
+        standards-based tools.
+
+        See https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html for details.
+        ********************************************************************************
+
+!!
+  self.initialize_options()
+C:\Users\Icarus\anaconda3\envs\vit1\lib\site-packages\setuptools\_distutils\cmd.py:66: EasyInstallDeprecationWarning: easy_install command is deprecated.
+!!
+
+        ********************************************************************************
+        Please avoid running ``setup.py`` and ``easy_install``.
+        Instead, use pypa/build, pypa/installer or other
+        standards-based tools.
+
+        See https://github.com/pypa/setuptools/issues/917 for details.
+        ********************************************************************************
+
+!!
+  self.initialize_options()
+running bdist_egg
+running egg_info
+creating MultiScaleDeformableAttention.egg-info
+writing MultiScaleDeformableAttention.egg-info\PKG-INFO
+writing dependency_links to MultiScaleDeformableAttention.egg-info\dependency_links.txt
+writing top-level names to MultiScaleDeformableAttention.egg-info\top_level.txt
+writing manifest file 'MultiScaleDeformableAttention.egg-info\SOURCES.txt'
+reading manifest file 'MultiScaleDeformableAttention.egg-info\SOURCES.txt'
+writing manifest file 'MultiScaleDeformableAttention.egg-info\SOURCES.txt'
+installing library code to build\bdist.win-amd64\egg
+running install_lib
+creating build\bdist.win-amd64\egg
+creating build\bdist.win-amd64\egg\functions
+copying build\lib.win-amd64-cpython-38\functions\ms_deform_attn_func.py -> build\bdist.win-amd64\egg\functions
+copying build\lib.win-amd64-cpython-38\functions\__init__.py -> build\bdist.win-amd64\egg\functions
+creating build\bdist.win-amd64\egg\modules
+copying build\lib.win-amd64-cpython-38\modules\ms_deform_attn.py -> build\bdist.win-amd64\egg\modules
+copying build\lib.win-amd64-cpython-38\modules\__init__.py -> build\bdist.win-amd64\egg\modules
+copying build\lib.win-amd64-cpython-38\MultiScaleDeformableAttention.cp38-win_amd64.pyd -> build\bdist.win-amd64\egg
+byte-compiling build\bdist.win-amd64\egg\functions\ms_deform_attn_func.py to ms_deform_attn_func.cpython-38.pyc
+byte-compiling build\bdist.win-amd64\egg\functions\__init__.py to __init__.cpython-38.pyc
+byte-compiling build\bdist.win-amd64\egg\modules\ms_deform_attn.py to ms_deform_attn.cpython-38.pyc
+byte-compiling build\bdist.win-amd64\egg\modules\__init__.py to __init__.cpython-38.pyc
+creating stub loader for MultiScaleDeformableAttention.cp38-win_amd64.pyd
+byte-compiling build\bdist.win-amd64\egg\MultiScaleDeformableAttention.py to MultiScaleDeformableAttention.cpython-38.pyc
+creating build\bdist.win-amd64\egg\EGG-INFO
+copying MultiScaleDeformableAttention.egg-info\PKG-INFO -> build\bdist.win-amd64\egg\EGG-INFO
+copying MultiScaleDeformableAttention.egg-info\SOURCES.txt -> build\bdist.win-amd64\egg\EGG-INFO
+copying MultiScaleDeformableAttention.egg-info\dependency_links.txt -> build\bdist.win-amd64\egg\EGG-INFO
+copying MultiScaleDeformableAttention.egg-info\top_level.txt -> build\bdist.win-amd64\egg\EGG-INFO
+writing build\bdist.win-amd64\egg\EGG-INFO\native_libs.txt
+zip_safe flag not set; analyzing archive contents...
+__pycache__.MultiScaleDeformableAttention.cpython-38: module references __file__
+creating dist
+creating 'dist\MultiScaleDeformableAttention-1.0-py3.8-win-amd64.egg' and adding 'build\bdist.win-amd64\egg' to it
+removing 'build\bdist.win-amd64\egg' (and everything under it)
+Processing MultiScaleDeformableAttention-1.0-py3.8-win-amd64.egg
+creating c:\users\icarus\anaconda3\envs\vit1\lib\site-packages\MultiScaleDeformableAttention-1.0-py3.8-win-amd64.egg
+Extracting MultiScaleDeformableAttention-1.0-py3.8-win-amd64.egg to c:\users\icarus\anaconda3\envs\vit1\lib\site-packages
+Adding MultiScaleDeformableAttention 1.0 to easy-install.pth file
+
+Installed c:\users\icarus\anaconda3\envs\vit1\lib\site-packages\multiscaledeformableattention-1.0-py3.8-win-amd64.egg
+Processing dependencies for MultiScaleDeformableAttention==1.0
+Finished processing dependencies for MultiScaleDeformableAttention==1.0
+
+(vit1) C:\Users\Icarus\Desktop\thesis\environment\4\ViT-CoMer\detection\ops>
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------

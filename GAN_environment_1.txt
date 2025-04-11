@@ -1,0 +1,14 @@
+安装依赖：
+conda create -n gan1 python=3.9
+conda activate gan1
+pip install torch torchvision opencv-python matplotlib scikit-image tqdm
+
+pip install notebook ipykernel
+python -m ipykernel install --user --name=gan1 --display-name "GAN1 (Python 3.9)"
+
+先测试：
+cd/
+cd C:\Users\Icarus\Desktop\thesis\environment\5-GAN\Foggy-CycleGAN\Foggy-CycleGAN-master
+conda activate gan1
+
+

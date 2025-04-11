@@ -1,0 +1,5 @@
+创建虚拟环境：
+conda create -n gan1 python=3.9
+打开虚拟环境：
+conda activate vit1
+conda activate gan1
